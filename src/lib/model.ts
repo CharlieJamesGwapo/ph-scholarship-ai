@@ -10,10 +10,10 @@ import type { LanguageModel } from 'ai';
  */
 export function getModel(): LanguageModel | null {
   if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-    return google(process.env.AI_MODEL ?? 'gemini-2.5-flash');
+    return google(process.env.AI_MODEL ?? 'gemini-3.8-flash');
   }
   if (process.env.AI_GATEWAY_API_KEY) {
-    return process.env.AI_MODEL ?? 'google/gemini-2.5-flash';
+    return process.env.AI_MODEL ?? 'google/gemini-3.8-flash';
   }
   return null;
 }

@@ -1,0 +1,66 @@
+import type { Scholarship } from '../src/lib/scholarships';
+
+const base = {
+  provider_type: 'government' as const,
+  regions: ['nationwide'],
+  eligibility: [],
+  benefits: [],
+  application_period: null,
+  how_to_apply: null,
+  source_urls: [],
+  last_checked: '2026-11-04',
+  notes: null,
+};
+
+export const fixtures: Scholarship[] = [
+  {
+    ...base,
+    id: 'dost-ug',
+    name: 'DOST-SEI Undergraduate Scholarship',
+    provider: 'DOST Science Education Institute',
+    levels: ['college'],
+    fields: ['STEM'],
+    summary: 'For students taking science and engineering courses.',
+    official_url: 'https://sei.dost.gov.ph/',
+  },
+  {
+    ...base,
+    id: 'owwa-edsp',
+    name: 'OWWA Education for Development Scholarship Program',
+    provider: 'Overseas Workers Welfare Administration',
+    levels: ['college'],
+    fields: ['any'],
+    summary: 'For dependents of OFWs who are active OWWA members.',
+    official_url: 'https://owwa.gov.ph/',
+  },
+  {
+    ...base,
+    id: 'tesda-twsp',
+    name: 'TESDA Training for Work Scholarship Program',
+    provider: 'TESDA',
+    levels: ['tech_voc'],
+    fields: ['any'],
+    summary: 'Free technical-vocational training with assessment.',
+    official_url: 'https://www.tesda.gov.ph/',
+  },
+  {
+    ...base,
+    id: 'shs-voucher',
+    name: 'Senior High School Voucher Program',
+    provider: 'DepEd / PEAC',
+    levels: ['senior_high'],
+    fields: ['any'],
+    summary: 'Voucher for Grade 11 and 12 students in private schools.',
+    official_url: 'https://peac.org.ph/',
+  },
+  {
+    ...base,
+    id: 'dost-grad',
+    name: 'DOST-SEI ASTHRDP Graduate Scholarship',
+    provider: 'DOST Science Education Institute',
+    levels: ['graduate'],
+    fields: ['STEM'],
+    summary: "Master's and PhD scholarships in science and technology.",
+    official_url: 'https://sei.dost.gov.ph/',
+  },
+];

@@ -13,6 +13,13 @@ import { buildContext, INSTRUCTIONS } from '@/lib/prompt';
 import type { Scholarship } from '@/lib/scholarships';
 import { searchScholarships } from '@/lib/search';
 
+const THINKING_LEVELS = ['minimal', 'low', 'medium', 'high'] as const;
+
+function thinkingLevel(): (typeof THINKING_LEVELS)[number] {
+  const v = process.env.AI_THINKING_LEVEL as (typeof THINKING_LEVELS)[number] | undefined;
+  return v && THINKING_LEVELS.includes(v) ? v : 'low';
+}
+
 const MAX_MESSAGES = 12;
 const MAX_QUESTION_CHARS = 1000;
 
@@ -63,7 +70,8 @@ export function createChatHandler(model: () => LanguageModel | null = getModel) 
           messages: await convertToModelMessages(recent),
           maxOutputTokens: 1200,
           // Answers are lookups over the sources, so skip long hidden reasoning (it caused timeouts).
-          providerOptions: { google: { thinkingConfig: { thinkingLevel: 'minimal' } } },
+          // gemini-3.8-flash rejects 'minimal'; AI_THINKING_LEVEL can change it without a code edit.
+          providerOptions: { google: { thinkingConfig: { thinkingLevel: thinkingLevel() } } },
         });
         writer.merge(
           toUIMessageStream({

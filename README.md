@@ -21,13 +21,13 @@ question ──► search (MiniSearch + Taglish synonyms + level filter)
             LLM with strict rules: answer only from <sources>, cite [n]
                 │
                 ▼
-answer + source links (sent before the answer starts streaming)
+answer + source links (the links are sent first, so they show even if the AI is busy)
 ```
 
 - **Data:** [`data/scholarships.json`](data/scholarships.json). Every entry has an `official_url`, `source_urls` and a `last_checked` date. Details the official page doesn't state are left `null`, never guessed.
 - **Search:** keyword search with fuzzy matching, plus everyday words mapped to the data (`kolehiyo` → college, `OFW` → OWWA, `baon` → stipend). When a question names a level (SHS, college, grad school, TESDA), programs for other levels are dropped.
 - **No database needed.** The dataset is small enough to search in memory, so it runs free on Vercel's hobby plan.
-- **Model:** Gemini (free tier) by default, or any model through Vercel AI Gateway.
+- **Model:** Gemini (free tier) by default, or any model through Vercel AI Gateway. Set `AI_MODEL` to a comma-separated list to fall back to another model when one is overloaded; if all fail, the reply lists the matching scholarships instead.
 
 ## Run it
 

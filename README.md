@@ -37,7 +37,7 @@ cp .env.example .env.local   # add a GOOGLE_GENERATIVE_AI_API_KEY
 npm run dev                  # http://localhost:3000
 ```
 
-The scholarship list below the chat works without any API key.
+Without an API key the app still works: the chat answers with the matching scholarships and their links, just without an AI summary.
 
 ```bash
 npm test          # search, prompt and streaming tests (no API key needed)

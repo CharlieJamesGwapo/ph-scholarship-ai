@@ -54,6 +54,14 @@ describe('chat handler', () => {
     expect(system).toContain('[1]');
   });
 
+  it('answers with search results only when no model is configured', async () => {
+    const res = await post(createChatHandler(() => null), ask('scholarship for children of OFWs'));
+    const body = await res.text();
+    expect(body).toContain('"type":"source-url"');
+    expect(body).toContain('These scholarships match your question');
+    expect(body).toContain('OWWA');
+  });
+
   it('rejects an empty question', async () => {
     const res = await post(createChatHandler(() => mockModel({})), ask('   '));
     expect(res.status).toBe(400);

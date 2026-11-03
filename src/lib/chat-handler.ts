@@ -10,6 +10,7 @@ import {
 
 import { getModel } from '@/lib/model';
 import { buildContext, INSTRUCTIONS } from '@/lib/prompt';
+import type { Scholarship } from '@/lib/scholarships';
 import { searchScholarships } from '@/lib/search';
 
 const MAX_MESSAGES = 12;
@@ -19,7 +20,16 @@ function textOf(m: UIMessage): string {
   return m.parts.map((p) => (p.type === 'text' ? p.text : '')).join(' ');
 }
 
-export function createChatHandler(model: () => LanguageModel = getModel) {
+/** Reply used when no AI model is configured: the search results, without an AI summary. */
+export function searchOnlyAnswer(results: Scholarship[]): string {
+  if (results.length === 0) {
+    return "I couldn't find a matching scholarship. Try naming your level (SHS, college, grad school, TESDA), your course, or your city.";
+  }
+  const lines = results.map((s, i) => `- **${s.name}** (${s.provider}) [${i + 1}]`);
+  return ['These scholarships match your question. Open each official page for requirements and deadlines:', ...lines].join('\n');
+}
+
+export function createChatHandler(model: () => LanguageModel | null = getModel) {
   return async function POST(req: Request) {
     const { messages }: { messages: UIMessage[] } = await req.json();
     const recent = messages.slice(-MAX_MESSAGES);
@@ -39,8 +49,16 @@ export function createChatHandler(model: () => LanguageModel = getModel) {
         results.forEach((s, i) =>
           writer.write({ type: 'source-url', sourceId: String(i + 1), url: s.official_url, title: s.name }),
         );
+        const llm = model();
+        if (!llm) {
+          writer.write({ type: 'text-start', id: 'search-only' });
+          writer.write({ type: 'text-delta', id: 'search-only', delta: searchOnlyAnswer(results) });
+          writer.write({ type: 'text-end', id: 'search-only' });
+          writer.write({ type: 'finish' });
+          return;
+        }
         const result = streamText({
-          model: model(),
+          model: llm,
           instructions: `${INSTRUCTIONS}\n\n${buildContext(results)}`,
           messages: await convertToModelMessages(recent),
         });

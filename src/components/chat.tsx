@@ -135,7 +135,11 @@ export function Chat() {
           );
         })}
         {status === 'submitted' && <p className="text-sm text-muted">Searching scholarships…</p>}
-        {error && <p className="text-sm text-red-600">Something went wrong. Please try again.</p>}
+        {error && (
+          <p className="text-sm text-red-600">
+            {error.message && !error.message.startsWith('{') ? error.message : 'Something went wrong. Please try again.'}
+          </p>
+        )}
       </div>
 
       <form onSubmit={onSubmit} className="flex gap-2">

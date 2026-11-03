@@ -62,7 +62,15 @@ export function createChatHandler(model: () => LanguageModel | null = getModel) 
           instructions: `${INSTRUCTIONS}\n\n${buildContext(results)}`,
           messages: await convertToModelMessages(recent),
         });
-        writer.merge(toUIMessageStream({ stream: result.stream, sendStart: false }));
+        writer.merge(
+          toUIMessageStream({
+            stream: result.stream,
+            sendStart: false,
+            // The sources were already sent, so the student can still use them.
+            onError: () =>
+              "The AI summary isn't available right now, but the scholarships listed above match your question. Open each official page for requirements and deadlines.",
+          }),
+        );
       },
       onError: () => 'Sorry, the AI is busy right now. Please try again in a moment.',
     });

@@ -62,6 +62,19 @@ describe('chat handler', () => {
     expect(body).toContain('OWWA');
   });
 
+  it('keeps the sources and explains when the model call fails', async () => {
+    const failing = new MockLanguageModelV4({
+      doStream: async () => {
+        throw new Error('API key not valid');
+      },
+    });
+    const res = await post(createChatHandler(() => failing), ask('scholarship for children of OFWs'));
+    const body = await res.text();
+    expect(body).toContain('"type":"source-url"');
+    expect(body).toContain("The AI summary isn't available right now");
+    expect(body).not.toContain('API key not valid');
+  });
+
   it('rejects an empty question', async () => {
     const res = await post(createChatHandler(() => mockModel({})), ask('   '));
     expect(res.status).toBe(400);

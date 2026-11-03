@@ -2,6 +2,8 @@
 
 **Ask in English or Taglish, get Philippine scholarships that fit you, with a link to every official page.**
 
+**Try it:** https://ph-scholarship-ai.vercel.app
+
 > "Incoming college ako, BS Engineering. Anong scholarship pwede?"
 
 Iskolar AI is a small retrieval-augmented generation (RAG) app. It searches a hand-checked list of Philippine scholarships, gives the best matches to an LLM, and the LLM answers **only from those matches**, citing each one as [1], [2]. If nothing fits, it says so instead of making something up.

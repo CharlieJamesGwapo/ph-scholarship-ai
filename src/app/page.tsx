@@ -29,6 +29,17 @@ export default function Home() {
           Open an issue
         </a>
         .
+        <p className="mt-3">
+          Free and open source.{' '}
+          <a className="text-accent underline" href="https://github.com/CharlieJamesGwapo/ph-scholarship-ai">
+            ⭐ Star it on GitHub
+          </a>{' '}
+          so more students find it, or{' '}
+          <a className="text-accent underline" href="https://github.com/sponsors/CharlieJamesGwapo">
+            💖 sponsor the maintainer
+          </a>{' '}
+          to keep the data checked.
+        </p>
       </footer>
     </main>
   );

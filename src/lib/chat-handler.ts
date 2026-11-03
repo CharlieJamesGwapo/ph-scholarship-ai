@@ -61,6 +61,9 @@ export function createChatHandler(model: () => LanguageModel | null = getModel) 
           model: llm,
           instructions: `${INSTRUCTIONS}\n\n${buildContext(results)}`,
           messages: await convertToModelMessages(recent),
+          maxOutputTokens: 1200,
+          // Answers are lookups over the sources, so skip long hidden reasoning (it caused timeouts).
+          providerOptions: { google: { thinkingConfig: { thinkingLevel: 'minimal' } } },
         });
         writer.merge(
           toUIMessageStream({
